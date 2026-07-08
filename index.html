@@ -1,154 +1,169 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>K Persona Lab · Nemotron Personas Korea</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nemotron Persona Extractor Korea</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-  <header class="topbar">
+  <header class="app-header">
     <div>
-      <p class="eyebrow">Nemotron-Personas-Korea Grounded Persona Tool</p>
-      <h1>K Persona Lab</h1>
-      <p class="subtitle">Hugging Face 원본 데이터셋에 연결해 한국형 페르소나를 만들고, 근거 데이터 기반으로 질문에 답합니다.</p>
+      <p class="eyebrow">NVIDIA Nemotron-Personas-Korea · GitHub Pages App</p>
+      <h1>한국형 페르소나 데이터 추출기</h1>
+      <p class="subtitle">원하는 특성을 선택해 Hugging Face 원본 데이터에서 최대 1,000명까지 수집하고, 페르소나 카드와 UX 리서치 산출물을 엑셀로 저장합니다.</p>
     </div>
-    <div class="top-actions">
-      <button id="btnTest" class="ghost">원본 데이터 연결 테스트</button>
-      <button id="btnReset" class="ghost danger">초기화</button>
-    </div>
+    <div class="status-pill" id="datasetStatus">데이터셋 대기 중</div>
   </header>
 
   <main class="layout">
-    <aside class="panel settings">
-      <section class="section">
-        <h2>1. 프로젝트 설정</h2>
-        <label>프로젝트명
-          <input id="projectTheme" value="AI TV 신규 서비스 컨셉 평가" />
-        </label>
-        <label>제품 / 서비스 컨셉
-          <textarea id="concept" rows="6">AI TV가 가족 구성원별 취향을 자동으로 이해하여 콘텐츠 추천, 화면 레이아웃, 음성 인터랙션, 알림 방식 등을 개인별로 자동 조정해주는 서비스</textarea>
-        </label>
-        <label>질문
-          <textarea id="question" rows="4">서울/경기 30~55세 사용자 관점에서 이 AI TV 서비스의 기대점과 우려점은 무엇인가요?</textarea>
-        </label>
-      </section>
+    <section class="panel controls-panel">
+      <div class="section-title">
+        <h2>1. 원하는 특성 선택</h2>
+        <p>조건이 좁을수록 수집 속도가 느려질 수 있습니다.</p>
+      </div>
 
-      <section class="section">
-        <h2>2. 데이터 필터</h2>
-        <div class="grid2">
-          <label>페르소나 수
-            <input id="personaCount" type="number" min="1" max="50" value="12" />
-          </label>
-          <label>탐색 행 수
-            <input id="searchLimit" type="number" min="20" max="500" value="100" />
-          </label>
-        </div>
-        <label>지역 province<br /><span class="hint">예: 서울특별시, 경기도 / 전체는 비워두기</span>
-          <input id="provinces" value="서울특별시, 경기도" />
+      <div class="form-grid two">
+        <label>
+          수집 목표 인원 <span class="hint">최대 1,000명</span>
+          <input id="targetCount" type="number" min="1" max="1000" value="300" />
         </label>
-        <label>시군구 district<br /><span class="hint">예: 강남구, 성남시 / 전체는 비워두기</span>
-          <input id="districts" value="" />
+        <label>
+          검색할 최대 원본 행 수 <span class="hint">권장 10,000~50,000</span>
+          <input id="scanLimit" type="number" min="100" max="1000000" step="100" value="30000" />
         </label>
-        <div class="grid2">
-          <label>최소 나이
-            <input id="ageMin" type="number" value="30" />
-          </label>
-          <label>최대 나이
-            <input id="ageMax" type="number" value="55" />
-          </label>
-        </div>
-        <label>성별 sex<br /><span class="hint">예: Male, Female / 전체는 비워두기</span>
-          <input id="sex" value="" />
+        <label>
+          시작 위치 Offset <span class="hint">다른 구간을 보려면 변경</span>
+          <input id="startOffset" type="number" min="0" step="100" value="0" />
         </label>
-        <label>직업 키워드<br /><span class="hint">쉼표 구분. 비워두면 전체 직업</span>
-          <input id="occupationKeywords" value="디자이너, 기획, 전문, 연구, 개발, 마케팅, 교수, 교육" />
+        <label>
+          한 번에 가져올 행 수 <span class="hint">API 최대 100</span>
+          <input id="batchSize" type="number" min="10" max="100" step="10" value="100" />
         </label>
-        <label>본문 검색 키워드<br /><span class="hint">쉼표 구분. 질문/컨셉과 관련된 단어</span>
-          <input id="contentKeywords" value="디자인, 제품, 사용자, 기술, 콘텐츠, AI, 서비스" />
+      </div>
+
+      <div class="field-group">
+        <div class="label-row">
+          <span>지역</span>
+          <div class="mini-actions">
+            <button type="button" id="selectAllRegions">전체 선택</button>
+            <button type="button" id="clearRegions">해제</button>
+          </div>
+        </div>
+        <div class="checkbox-grid" id="provinceList"></div>
+      </div>
+
+      <div class="form-grid two">
+        <label>
+          나이 최소
+          <input id="ageMin" type="number" min="19" max="120" value="30" />
         </label>
-      </section>
-
-      <section class="section">
-        <h2>3. AI 답변 설정</h2>
-        <label>Gemini API Key<br /><span class="hint">GitHub에 저장되지 않고 브라우저 localStorage에만 저장됩니다.</span>
-          <input id="geminiKey" type="password" placeholder="AIza..." />
+        <label>
+          나이 최대
+          <input id="ageMax" type="number" min="19" max="120" value="55" />
         </label>
-        <div class="grid2">
-          <label>모델
-            <input id="geminiModel" value="gemini-3.5-flash" />
-          </label>
-          <label>Temperature
-            <input id="temperature" type="number" step="0.1" min="0" max="1.5" value="0.3" />
-          </label>
-        </div>
-        <div class="row-actions">
-          <button id="btnSaveKey" class="ghost">API Key 저장</button>
-          <button id="btnClearKey" class="ghost">삭제</button>
-        </div>
-      </section>
+        <label>
+          성별
+          <select id="sex">
+            <option value="">전체</option>
+            <option value="male">남성</option>
+            <option value="female">여성</option>
+          </select>
+        </label>
+        <label>
+          직업 키워드 <span class="hint">쉼표로 구분</span>
+          <input id="occupationKeywords" type="text" placeholder="예: 디자이너, 기획, 연구, 개발" />
+        </label>
+        <label>
+          가족 형태 <span class="hint">부분 일치</span>
+          <input id="familyType" type="text" placeholder="예: 1인, 부부, 자녀, 다세대" />
+        </label>
+        <label>
+          주거 형태 <span class="hint">부분 일치</span>
+          <input id="housingType" type="text" placeholder="예: 아파트, 자가, 전세, 월세" />
+        </label>
+        <label>
+          교육 수준 <span class="hint">부분 일치</span>
+          <input id="educationLevel" type="text" placeholder="예: 대학교, 석사, 박사, 고등학교" />
+        </label>
+        <label>
+          관심 키워드 <span class="hint">쉼표로 구분</span>
+          <input id="interestKeywords" type="text" placeholder="예: AI, 기술, 여행, 음식, 스포츠" />
+        </label>
+      </div>
 
-      <section class="section runbox">
-        <button id="btnGeneratePersonas" class="primary">페르소나 생성</button>
-        <button id="btnAsk" class="primary secondary">데이터 기반 답변 생성</button>
-        <button id="btnExportMd" class="ghost">Markdown 다운로드</button>
-        <button id="btnExportCsv" class="ghost">CSV 다운로드</button>
-      </section>
-    </aside>
+      <label>
+        제품 / 서비스 주제
+        <textarea id="productTopic" rows="5">AI TV가 가족 구성원별 취향을 자동으로 이해하여 콘텐츠 추천, 화면 레이아웃, 음성 인터랙션을 개인별로 조정하는 서비스</textarea>
+      </label>
 
-    <section class="workspace">
-      <div class="status" id="status">준비 완료</div>
+      <div class="button-row">
+        <button id="runSearch" class="primary">원본 데이터 검색 시작</button>
+        <button id="stopSearch" class="secondary" disabled>중지</button>
+        <button id="clearResults" class="secondary">결과 초기화</button>
+      </div>
+    </section>
 
-      <section class="panel result-block">
-        <div class="block-head">
-          <h2>데이터 기반 답변</h2>
-          <span id="answerMeta" class="meta"></span>
-        </div>
-        <div id="answer" class="answer empty">아직 생성된 답변이 없습니다.</div>
-      </section>
+    <section class="panel progress-panel">
+      <div class="section-title">
+        <h2>2. 수집 진행률</h2>
+        <p>Hugging Face Dataset Viewer API에서 원본 행을 순차 수집합니다.</p>
+      </div>
 
-      <section class="panel result-block">
-        <div class="block-head">
-          <h2>생성된 페르소나</h2>
-          <span id="personaMeta" class="meta"></span>
-        </div>
-        <div id="personaCards" class="cards empty">아직 생성된 페르소나가 없습니다.</div>
-      </section>
+      <div class="progress-shell">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="metrics">
+        <div><strong id="matchedCount">0</strong><span>수집 인원</span></div>
+        <div><strong id="scannedCount">0</strong><span>검색 행 수</span></div>
+        <div><strong id="apiCount">0</strong><span>API 호출</span></div>
+        <div><strong id="elapsedTime">0s</strong><span>소요 시간</span></div>
+      </div>
+      <pre id="logBox" class="log-box">대기 중입니다.</pre>
+    </section>
 
-      <section class="panel result-block">
-        <div class="block-head">
-          <h2>근거 데이터</h2>
-          <span id="evidenceMeta" class="meta"></span>
+    <section class="panel results-panel">
+      <div class="section-title with-actions">
+        <div>
+          <h2>3. 원본 데이터 검색 결과</h2>
+          <p>수집된 row의 일부를 미리 보여줍니다.</p>
         </div>
-        <div class="table-wrap">
-          <table id="evidenceTable">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>나이</th>
-                <th>성별</th>
-                <th>지역</th>
-                <th>직업</th>
-                <th>요약</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <div class="button-row compact">
+          <button id="exportExcel" class="primary" disabled>엑셀 저장</button>
+          <button id="exportCsv" class="secondary" disabled>Raw CSV 저장</button>
         </div>
-      </section>
+      </div>
+      <div id="tableWrap" class="table-wrap empty">아직 수집된 데이터가 없습니다.</div>
+    </section>
 
-      <section class="panel result-block">
-        <div class="block-head">
-          <h2>LLM 프롬프트 백업</h2>
-          <button id="btnCopyPrompt" class="ghost small">복사</button>
-        </div>
-        <textarea id="promptBackup" rows="12" readonly placeholder="API 키가 없거나 호출 실패 시, 이 프롬프트를 Gemini/ChatGPT에 붙여넣어 사용할 수 있습니다."></textarea>
-      </section>
+    <section class="panel cards-panel">
+      <div class="section-title">
+        <h2>4. 페르소나 카드 / UX 리서치 산출물</h2>
+        <p>원본 데이터 필드를 근거로 자동 구성합니다.</p>
+      </div>
+      <div id="cardsWrap" class="cards-grid empty">검색 후 페르소나 카드가 생성됩니다.</div>
+    </section>
+
+    <section class="panel qa-panel">
+      <div class="section-title">
+        <h2>5. 데이터에 근거한 질문 답변</h2>
+        <p>수집된 데이터 안에서만 요약합니다. 실제 사용자 조사 결과가 아니라 합성 데이터 기반 가설입니다.</p>
+      </div>
+      <label>
+        질문
+        <textarea id="questionInput" rows="3" placeholder="예: 이 페르소나 집단이 AI TV 서비스에서 가장 우려할 점은 무엇인가요?"></textarea>
+      </label>
+      <div class="button-row">
+        <button id="answerQuestion" class="primary" disabled>근거 기반 답변 생성</button>
+      </div>
+      <div id="answerBox" class="answer-box">검색 결과가 생성되면 질문 답변을 만들 수 있습니다.</div>
     </section>
   </main>
 
   <footer class="footer">
-    <p>Dataset: nvidia/Nemotron-Personas-Korea · API: Hugging Face Dataset Viewer · Optional LLM: Gemini API</p>
+    <p>Dataset: <a href="https://huggingface.co/datasets/nvidia/Nemotron-Personas-Korea" target="_blank" rel="noreferrer">nvidia/Nemotron-Personas-Korea</a> · API: <a href="https://huggingface.co/docs/dataset-viewer/quick_start" target="_blank" rel="noreferrer">Hugging Face Dataset Viewer</a></p>
+    <p>주의: 이 데이터는 실제 개인 정보가 아니라 한국 통계 기반 합성 페르소나 데이터입니다. 실사용 전 실제 리서치로 검증하세요.</p>
   </footer>
 
   <script src="app.js"></script>
