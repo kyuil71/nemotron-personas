@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nemotron-Personas USA 2단계 추출기</title>
+  <link rel="stylesheet" href="./styles.css?v=visual-fix-20260713" />
+  <style id="embedded-style-fallback">
+:root {
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --ink: #1d1d1f;
+  --ink-2: #6e6e73;
+  --hair: #d2d2d7;
+  --hair-soft: #e8e8ed;
+  --blue: #0071e3;
+  --blue-press: #0064c8;
+  --blue-tint: #e8f1fd;
+  --green-tint: #e9f7ef;
+  --green-ink: #1a6b42;
+  --red: #d92d20;
+  --red-tint: #fdecec;
+  --radius-lg: 20px;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow: 0 4px 24px rgba(0,0,0,.06);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.47;
+  letter-spacing: -0.01em;
+}
+b { font-weight: 600; }
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255,255,255,.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--hair-soft);
+}
+.nav-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 22px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand { font-weight: 600; font-size: 15px; letter-spacing: -0.02em; }
+.nav-link, .link-btn { color: var(--blue); text-decoration: none; font-size: 13px; font-weight: 500; }
+.nav-link:hover, .link-btn:hover { text-decoration: underline; }
+.link-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font-family: var(--font); }
+
+.hero { text-align: center; padding: 56px 22px 30px; }
+.eyebrow { margin: 0 0 8px; color: var(--blue); font-size: 13px; font-weight: 600; }
+.hero h1 {
+  margin: 0 0 16px;
+  font-size: clamp(24px, 4.5vw, 42px);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+.tagline { margin: 0 auto; max-width: 720px; color: var(--ink-2); font-size: 15px; line-height: 1.7; }
+.flow {
+  list-style: none;
+  margin: 24px auto 0;
+  padding: 0;
+  max-width: 780px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.flow li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--hair-soft);
+  border-radius: 980px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+.flow li span { color: var(--ink-2); }
+
+.wrap { max-width: 960px; margin: 0 auto 40px; padding: 0 22px; }
+.banner, .notice {
+  border-radius: var(--radius);
+  padding: 13px 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  background: var(--blue-tint);
+  color: #1c4f8a;
+  border: 1px solid #cfe2fb;
+}
+.banner.ok, .notice.ok { background: var(--green-tint); color: var(--green-ink); border-color: #c9ecd8; }
+.banner.error { background: var(--red-tint); color: #a12222; border-color: #f6cccc; }
+.notice { margin: 0 0 18px; }
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 26px 26px 28px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0,0,0,.04);
+}
+.card-head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+.card-head.simple { display: block; margin-bottom: 16px; }
+.card-head h2 { margin: 0; font-size: 21px; font-weight: 650; letter-spacing: -0.025em; }
+.card-head .lede, .lede { margin: 4px 0 0; color: var(--ink-2); font-size: 14px; }
+.step {
+  flex: 0 0 auto;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+  margin-top: 2px;
+}
+
+.source-grid, .result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+.source-grid > div, .result-grid > div {
+  border: 1px solid var(--hair-soft);
+  border-radius: var(--radius);
+  padding: 14px;
+  background: #fbfbfd;
+}
+.label { display: block; color: var(--ink-2); font-size: 12px; margin-bottom: 4px; }
+.source-grid b, .result-grid b { display: block; font-size: 14px; word-break: break-word; }
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px 22px;
+  margin-bottom: 8px;
+}
+.field .title, .title {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 9px;
+  letter-spacing: -0.01em;
+}
+.hint, .field .hint { font-size: 12px; color: var(--ink-2); margin-top: 7px; }
+
+input[type="text"], input[type="number"], input[type="password"], select, textarea {
+  width: 100%;
+  font-family: var(--font);
+  font-size: 15px;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--hair);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+textarea { resize: vertical; min-height: 88px; line-height: 1.55; }
+input:focus, select:focus, textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3.5px rgba(0,113,227,.18);
+}
+input:disabled, select:disabled, textarea:disabled { background: #f5f5f7; color: #b0b0b5; }
+
+.rangebox, .multi {
+  border: 1px solid var(--hair);
+  border-radius: var(--radius);
+  background: #fff;
+  overflow: hidden;
+}
+.rangebody { padding: 12px 13px; }
+.age-row { display: flex; align-items: center; gap: 9px; transition: opacity .15s; }
+.age-row.disabled { opacity: .4; }
+.age-row span { color: var(--ink-2); }
+.multi .list { max-height: 176px; overflow-y: auto; }
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 13px;
+  font-size: 14px;
+  cursor: pointer;
+  border-top: 1px solid var(--hair-soft);
+}
+.multi .list .opt:first-child { border-top: none; }
+.opt:hover { background: #f7f7fa; }
+.opt input[type="checkbox"] { width: 18px; height: 18px; margin: 0; flex: 0 0 auto; accent-color: var(--blue); cursor: pointer; }
+.opt.any { font-weight: 600; background: #fbfbfd; border-top: none; border-bottom: 1px solid var(--hair); }
+
+.keyword-box { margin-bottom: 18px; }
+.keyword-columns { margin: 20px 0; }
+.title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+.title-row .title { margin-bottom: 0; }
+.inline-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.column-checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 8px;
+  border: 1px solid var(--hair-soft);
+  border-radius: var(--radius);
+  padding: 12px;
+  background: #fbfbfd;
+  max-height: 220px;
+  overflow: auto;
+}
+.col-check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--ink);
+  padding: 5px 4px;
+}
+.col-check input { accent-color: var(--blue); }
+.col-check small { color: var(--ink-2); margin-left: 2px; }
+
+.options { display: flex; flex-wrap: wrap; gap: 22px; }
+.opt-field { display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: -0.01em; }
+.opt-field input, .select-wrap { min-width: 190px; }
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--ink-2);
+  border-bottom: 2px solid var(--ink-2);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+select { padding-right: 34px; cursor: pointer; }
+.adv { margin-top: 20px; border-top: 1px solid var(--hair-soft); padding-top: 16px; }
+.adv summary { cursor: pointer; font-size: 14px; font-weight: 500; color: var(--blue); list-style: none; width: fit-content; }
+.adv summary::-webkit-details-marker { display: none; }
+.adv summary::before { content: "＋ "; }
+.adv[open] summary::before { content: "－ "; }
+.adv .token { margin-top: 14px; max-width: 380px; }
+.fine { color: var(--ink-2); font-size: 12.5px; margin: 8px 0 0; max-width: 760px; }
+.top-gap { margin-top: 20px; }
+.run-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.progress { font-size: 14px; color: var(--ink-2); min-height: 20px; margin-top: 12px; }
+
+.btn {
+  border: none;
+  border-radius: 980px;
+  padding: 11px 22px;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background .18s, transform .06s, opacity .18s, box-shadow .18s;
+}
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn.primary { background: var(--blue); color: #fff; }
+.btn.primary:hover:not(:disabled) { background: var(--blue-press); }
+.btn.tinted { background: var(--blue-tint); color: var(--blue); }
+.btn.tinted:hover:not(:disabled) { background: #dcebfb; }
+.btn.ghost { background: transparent; color: var(--blue); border: 1px solid var(--hair); padding: 10px 18px; }
+.btn.ghost:hover:not(:disabled) { background: #f2f2f6; }
+.btn.danger { background: var(--red-tint); color: var(--red); }
+.btn.small { font-size: 13px; padding: 7px 15px; margin-top: 16px; }
+
+.secondary-body.disabled { opacity: .45; pointer-events: none; }
+.secondary-options { margin-bottom: 18px; }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--hair-soft); border-radius: var(--radius); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td {
+  padding: 10px 13px;
+  text-align: left;
+  white-space: nowrap;
+  max-width: 340px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom: 1px solid var(--hair-soft);
+}
+th { background: #fbfbfd; position: sticky; top: 0; font-weight: 600; color: var(--ink-2); letter-spacing: -0.01em; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #f7f7fa; }
+.muted { color: var(--ink-2); font-weight: 400; font-size: 14px; }
+.preview-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-end; }
+
+.foot { text-align: center; color: var(--ink-2); font-size: 12.5px; padding: 32px 22px 48px; line-height: 1.7; }
+.foot a { color: var(--blue); text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .hero { padding: 42px 18px 26px; }
+  .card { padding: 22px 18px 24px; }
+  .options { display: grid; grid-template-columns: 1fr; }
+  .opt-field input, .select-wrap { min-width: 100%; }
+  .title-row { align-items: flex-start; flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
+/* ---- 다단계 수집 / 프로젝트 버튼 추가 ---- */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.nav-btn {
+  border: 1px solid var(--hair);
+  background: #fff;
+  color: var(--blue);
+  border-radius: 980px;
+  padding: 6px 11px;
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.nav-btn:hover:not(:disabled) { background: #f2f2f6; }
+.nav-btn:disabled { opacity: .45; cursor: not-allowed; }
+.stage-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0 18px;
+}
+.stage-summary > div {
+  border: 1px solid var(--hair-soft);
+  border-radius: var(--radius);
+  background: #fbfbfd;
+  padding: 14px 16px;
+}
+.stage-summary .label {
+  display: block;
+  color: var(--ink-2);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.stage-summary b {
+  font-size: 18px;
+}
+.stage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+.stage-card {
+  border: 1px solid var(--hair-soft);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 14px 14px 16px;
+  min-height: 128px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.stage-card b { font-size: 14px; }
+.stage-card span { color: var(--ink-2); font-size: 13px; }
+.stage-card.done {
+  background: var(--green-tint);
+  border-color: #c9ecd8;
+}
+.stage-card.done span { color: var(--green-ink); font-weight: 600; }
+.stage-card .btn.small { margin-top: auto; }
+
+@media (max-width: 760px) {
+  .nav-inner { height: auto; min-height: 52px; padding-top: 10px; padding-bottom: 10px; gap: 8px; align-items: flex-start; }
+  .nav-actions { gap: 6px; }
+  .stage-summary { grid-template-columns: 1fr; }
+}
+
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <span class="brand">Nemotron-Personas USA 다단계 추출기</span>
+      <div class="nav-actions">
+        <button id="saveProjectBtn" class="nav-btn" type="button">프로젝트 저장 JSON</button>
+        <button id="openProjectBtn" class="nav-btn" type="button">프로젝트 열기 JSON</button>
+        <input id="projectFileInput" type="file" accept="application/json,.json" hidden />
+        <a class="nav-link" href="https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA" target="_blank" rel="noopener">미국 데이터셋 ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">USA-only · 1차 5단계 누적 수집 · 2차 정밀 필터</p>
+    <h1>미국 전용 Nemotron-Personas 다단계 추출기</h1>
+    <p class="tagline">
+      NVIDIA <b>Nemotron-Personas-USA</b> 데이터셋에서 조건에 맞는 미국 합성 페르소나를 수집합니다.
+      1차는 성별·나이·지역·학력 같은 <b>정확 조건</b>으로 1단계당 <b>5,000명</b>씩, 최대 <b>25,000명</b>까지 누적 수집하고,
+      2차는 프로그램 안에 보관된 전체 1차 후보군을 키워드로 다시 정밀 필터링합니다.
+    </p>
+    <ul class="flow" aria-label="작업 흐름">
+      <li><b>1차</b><span>동일 조건에서 1~5단계 누적 수집</span></li>
+      <li><b>2차</b><span>누적 후보 전체에서 키워드 정밀 필터</span></li>
+      <li><b>저장</b><span>엑셀 또는 프로젝트 JSON 저장</span></li>
+    </ul>
+  </section>
+
+  <main class="wrap">
+    <div id="banner" class="banner">미국 데이터 정보를 불러오는 중…</div>
+
+    <section class="card status-card">
+      <div class="card-head simple">
+        <h2>데이터 소스</h2>
+        <p class="lede">미국 데이터셋만 사용합니다. 국가 선택 기능은 제거했습니다.</p>
+      </div>
+      <div class="source-grid">
+        <div><span class="label">Dataset</span><b id="datasetName">nvidia/Nemotron-Personas-USA</b></div>
+        <div><span class="label">Config / Split</span><b id="configSplit">확인 중…</b></div>
+        <div><span class="label">소스 규모</span><b id="sourceTotal">확인 중…</b></div>
+      </div>
+      <p class="fine">화면 라벨은 한국어로 보이지만, 수집 조건은 미국 데이터의 원본 컬럼명과 영어 원문값을 사용합니다.</p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <span class="step">1</span>
+        <div>
+          <h2>1차 정확 조건</h2>
+          <p class="lede">성별, 나이, 주·도시·우편번호, 학력처럼 명확한 조건은 먼저 서버에서 줄입니다. 필요 없으면 <b>상관 없음</b>으로 두세요.</p>
+        </div>
+      </div>
+      <div id="filters" class="filters"></div>
+      <button id="resetBtn" class="btn ghost small">정확 조건 초기화</button>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <span class="step">2</span>
+        <div>
+          <h2>1차 후보 수집: 1~5단계 누적</h2>
+          <p class="lede">동일한 정확 조건에서 검색 구간을 나누어 1단계당 <b id="stageSizeLabel">5,000명</b>씩 수집합니다. 5단계까지 완료하면 최대 <b id="totalCapLabel">25,000명</b>의 1차 후보군이 프로그램 안에 누적됩니다.</p>
+        </div>
+      </div>
+
+      <div class="notice ok">
+        1차 단계에서는 키워드 검색을 사용하지 않습니다. 각 단계는 같은 조건의 다른 구간을 가져오며, 수집된 모든 1차 후보를 대상으로 2차 필터링을 진행합니다.
+      </div>
+
+      <div class="stage-summary">
+        <div><span class="label">완료 단계</span><b id="stageCompletedCount">0 / 5단계</b></div>
+        <div><span class="label">1차 누적 후보</span><b id="stageTotalCount">0명</b></div>
+        <div><span class="label">단계당 수집 수</span><b>최대 5,000명</b></div>
+      </div>
+
+      <div class="stage-grid">
+        <div class="stage-card" id="stageCard1">
+          <b>1차 후보수집-1단계</b>
+          <span id="stageStatus1">대기 중</span>
+          <button id="collectStage1Btn" class="btn ghost small stage-collect-btn" type="button" data-stage="1">1단계 수집</button>
+        </div>
+        <div class="stage-card" id="stageCard2">
+          <b>1차 후보수집-2단계</b>
+          <span id="stageStatus2">대기 중</span>
+          <button id="collectStage2Btn" class="btn ghost small stage-collect-btn" type="button" data-stage="2">2단계 수집</button>
+        </div>
+        <div class="stage-card" id="stageCard3">
+          <b>1차 후보수집-3단계</b>
+          <span id="stageStatus3">대기 중</span>
+          <button id="collectStage3Btn" class="btn ghost small stage-collect-btn" type="button" data-stage="3">3단계 수집</button>
+        </div>
+        <div class="stage-card" id="stageCard4">
+          <b>1차 후보수집-4단계</b>
+          <span id="stageStatus4">대기 중</span>
+          <button id="collectStage4Btn" class="btn ghost small stage-collect-btn" type="button" data-stage="4">4단계 수집</button>
+        </div>
+        <div class="stage-card" id="stageCard5">
+          <b>1차 후보수집-5단계</b>
+          <span id="stageStatus5">대기 중</span>
+          <button id="collectStage5Btn" class="btn ghost small stage-collect-btn" type="button" data-stage="5">5단계 수집</button>
+        </div>
+      </div>
+
+      <details class="adv">
+        <summary>고급 설정</summary>
+        <label class="opt-field token">Hugging Face 토큰
+          <input id="token" type="password" placeholder="hf_… (선택 사항)" />
+        </label>
+        <p class="fine">토큰은 브라우저 메모리에만 임시로 두며 Hugging Face API 호출에만 사용됩니다.</p>
+      </details>
+
+      <div class="run-actions top-gap">
+        <button id="collectNextStageBtn" class="btn primary">다음 단계 수집</button>
+        <button id="cancelBtn" class="btn danger" disabled>수집 취소</button>
+        <button id="downloadStage1Btn" class="btn tinted" disabled>1차 누적 후보 엑셀 저장</button>
+        <button id="clearStage1Btn" class="btn ghost" disabled>1차 후보 전체 초기화</button>
+      </div>
+      <div id="progress" class="progress"></div>
+    </section>
+
+    <section class="card secondary" id="secondaryCard">
+      <div class="card-head">
+        <span class="step">3</span>
+        <div>
+          <h2>2차 내부 필터링</h2>
+          <p class="lede">엑셀 업로드 없이, 1~5단계에서 누적 수집한 1차 후보 전체 안에서 다시 검색합니다.</p>
+        </div>
+      </div>
+
+      <div class="notice" id="secondaryNotice">먼저 1차 후보를 수집하면 2차 필터를 사용할 수 있습니다.</div>
+
+      <div class="secondary-body disabled" id="secondaryBody">
+        <div class="keyword-box">
+          <label class="title" for="stage2Include">2차 포함 키워드</label>
+          <textarea id="stage2Include" rows="4" placeholder="예: UX 리서치, 인터뷰, 사용자 관찰, 디자인 전략"></textarea>
+          <p class="hint">쉼표·줄바꿈·슬래시로 여러 키워드를 입력하세요.</p>
+        </div>
+
+        <div class="keyword-box">
+          <label class="title" for="stage2Exclude">2차 제외 키워드</label>
+          <textarea id="stage2Exclude" rows="3" placeholder="예: 학생, 은퇴, 취미로만, 무관"></textarea>
+          <p class="hint">제외 키워드가 하나라도 포함되면 최종 결과에서 제외됩니다.</p>
+        </div>
+
+        <div class="options secondary-options">
+          <label class="opt-field">포함 판정 방식
+            <div class="select-wrap">
+              <select id="stage2Mode">
+                <option value="any">하나라도 포함</option>
+                <option value="all">모두 포함</option>
+                <option value="min">최소 N개 이상 포함</option>
+              </select>
+            </div>
+          </label>
+          <label class="opt-field">최소 포함 개수
+            <input id="stage2Min" type="number" min="1" max="20" value="2" step="1" />
+          </label>
+        </div>
+
+        <div class="keyword-columns">
+          <div class="title-row">
+            <label class="title">2차 검색 대상 컬럼</label>
+            <div class="inline-actions">
+              <button id="stage2ColsText" class="link-btn" type="button">텍스트 중심</button>
+              <button id="stage2ColsAll" class="link-btn" type="button">전체 선택</button>
+            </div>
+          </div>
+          <div id="stage2Columns" class="column-checks"></div>
+        </div>
+
+        <div class="run-actions top-gap">
+          <button id="filterStage2Btn" class="btn primary">2차 필터 적용</button>
+          <button id="resetStage2Btn" class="btn ghost">2차 조건 초기화</button>
+          <button id="downloadFinalBtn" class="btn tinted" disabled>최종 결과 엑셀 저장</button>
+        </div>
+        <div id="stage2Progress" class="progress"></div>
+      </div>
+    </section>
+
+    <section class="card" id="summaryCard" hidden>
+      <div class="card-head simple">
+        <h2>수집 결과 요약</h2>
+      </div>
+      <div class="result-grid">
+        <div><span class="label">1차 누적 후보</span><b id="stage1Count">0명</b></div>
+        <div><span class="label">2차 최종</span><b id="finalCount">0명</b></div>
+        <div><span class="label">현재 미리보기</span><b id="previewMode">없음</b></div>
+      </div>
+    </section>
+
+    <section class="card" id="previewCard" hidden>
+      <div class="card-head simple preview-head">
+        <div>
+          <h2>미리보기 <span id="previewCount" class="muted"></span></h2>
+          <p id="previewCaption" class="lede"></p>
+        </div>
+      </div>
+      <div class="tablewrap"><table id="previewTable"></table></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    데이터 출처: <a href="https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA" target="_blank" rel="noopener">NVIDIA Nemotron-Personas-USA</a> · CC BY 4.0<br />
+    통계 기반 합성 데이터이며 실제 개인정보가 아닙니다.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
