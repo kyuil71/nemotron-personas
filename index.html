@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nemotron-Personas USA 다단계 추출기</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>:root{
+  --bg:#f5f5f7;
+  --surface:#fff;
+  --ink:#1d1d1f;
+  --muted:#6e6e73;
+  --hair:#d2d2d7;
+  --hair2:#e8e8ed;
+  --blue:#0071e3;
+  --blue2:#e8f1fd;
+  --green:#0a7a3d;
+  --green2:#e9f7ef;
+  --red:#b42318;
+  --red2:#fdecec;
+  --amber:#9a5b00;
+  --amber2:#fff6e5;
+  --radius-xl:28px;
+  --radius-lg:20px;
+  --radius:14px;
+  --shadow:0 8px 30px rgba(0,0,0,.06);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Apple SD Gothic Neo","Pretendard","Malgun Gothic","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{font-family:var(--font);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:var(--bg);color:var(--ink)}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;letter-spacing:-.015em;overflow-x:hidden}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+b,strong{font-weight:700}.sr-only{position:absolute;left:-9999px}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(245,245,247,.82);backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);border-bottom:1px solid rgba(0,0,0,.06)}
+.topbar-inner{max-width:1160px;margin:0 auto;padding:11px 24px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.brand{font-weight:700;font-size:15px;white-space:nowrap}.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.hero{max-width:1160px;margin:0 auto;padding:56px 24px 34px;text-align:center}.eyebrow{font-size:14px;font-weight:800;color:var(--blue);margin-bottom:12px;letter-spacing:.02em}.hero h1{font-size:clamp(36px,6vw,76px);line-height:1.05;margin:0 0 22px;font-weight:800;letter-spacing:-.045em}.tagline{max-width:860px;margin:0 auto;color:var(--muted);font-size:clamp(17px,2vw,23px);line-height:1.65}.pill-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:30px}.pill{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--hair2);background:rgba(255,255,255,.86);border-radius:999px;padding:11px 20px;box-shadow:0 2px 10px rgba(0,0,0,.04);font-size:15px;color:var(--muted)}.pill b{color:var(--ink)}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px 60px}.banner{border:1px solid #cfe2fb;background:var(--blue2);color:#174e8c;padding:16px 20px;border-radius:var(--radius-lg);font-size:15px;margin-bottom:22px}.banner.ok{background:var(--green2);border-color:#c9ecd8;color:#16643a}.banner.warn{background:var(--amber2);border-color:#ffe0a3;color:var(--amber)}.banner.error{background:var(--red2);border-color:#f6c7c7;color:var(--red)}
+.card{background:var(--surface);border:1px solid rgba(0,0,0,.04);border-radius:var(--radius-xl);box-shadow:var(--shadow);padding:28px;margin-bottom:22px}.card-head{display:flex;align-items:flex-start;gap:16px;margin-bottom:22px}.step{width:32px;height:32px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:15px;font-weight:800;flex:0 0 auto}.card h2{font-size:25px;line-height:1.2;margin:0 0 7px;font-weight:800;letter-spacing:-.03em}.lede{color:var(--muted);font-size:15px;margin:0}.fine{font-size:13px;color:var(--muted);margin:8px 0 0}.mono{font-family:"SF Mono",Menlo,Consolas,monospace;letter-spacing:0}.grid{display:grid;gap:18px}.source-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.source-box{border:1px solid var(--hair2);border-radius:var(--radius-lg);padding:18px;background:#fbfbfd}.source-box .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:800}.source-box .value{font-size:16px;font-weight:700;margin-top:4px;word-break:break-word}.filters{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}.field{border:1px solid var(--hair2);background:#fbfbfd;border-radius:var(--radius-lg);padding:16px}.field-title{display:block;font-size:14px;font-weight:800;margin-bottom:10px;color:var(--ink)}.hint{font-size:12px;color:var(--muted);margin-top:8px}.check-list{max-height:190px;overflow:auto;border:1px solid var(--hair2);border-radius:12px;background:#fff}.check-row{display:flex;align-items:center;gap:9px;padding:9px 11px;border-bottom:1px solid var(--hair2);font-size:14px;cursor:pointer}.check-row:last-child{border-bottom:none}.check-row:hover{background:#f7f7fa}.check-row input{width:16px;height:16px;accent-color:var(--blue)}
+.input, input[type="text"], input[type="number"], input[type="password"], select, textarea{width:100%;font-family:var(--font);font-size:15px;color:var(--ink);background:#fff;border:1px solid var(--hair);border-radius:12px;padding:10px 12px;outline:none;transition:border-color .15s,box-shadow .15s}textarea{min-height:92px;resize:vertical;line-height:1.5}input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(0,113,227,.15)}input:disabled,select:disabled,textarea:disabled{background:#f2f2f4;color:#aaa}.range-row{display:flex;align-items:center;gap:10px}.range-row span{color:var(--muted)}
+.btn{border:0;border-radius:999px;padding:11px 18px;font-family:var(--font);font-size:15px;font-weight:800;letter-spacing:-.01em;cursor:pointer;transition:transform .06s,opacity .18s,background .18s,box-shadow .18s}.btn:active{transform:scale(.97)}.btn:disabled{opacity:.42;cursor:not-allowed}.btn.primary{background:var(--blue);color:#fff}.btn.primary:hover:not(:disabled){background:#0064c8}.btn.tinted{background:var(--blue2);color:var(--blue)}.btn.tinted:hover:not(:disabled){background:#dcebfb}.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--hair2)}.btn.ghost:hover:not(:disabled){background:#f2f2f6}.btn.danger{background:var(--red2);color:var(--red)}.btn.small{padding:8px 14px;font-size:13px}.btn.green{background:var(--green2);color:var(--green)}.button-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.stage-card{border:1px solid var(--hair2);border-radius:var(--radius-lg);padding:16px;background:#fbfbfd;display:flex;flex-direction:column;gap:10px;min-height:154px}.stage-card.done{background:var(--green2);border-color:#c9ecd8}.stage-title{font-weight:800}.stage-count{font-size:14px;color:var(--muted)}.stage-status{font-size:12px;color:var(--muted);min-height:34px}.status-line{padding:12px 0;color:var(--muted);font-size:14px}.progress{height:8px;border-radius:999px;background:#e8e8ed;overflow:hidden;margin-top:12px}.progress > div{height:100%;width:0;background:var(--blue);border-radius:inherit;transition:width .2s}.stats{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}.stat{background:#fbfbfd;border:1px solid var(--hair2);border-radius:16px;padding:13px 16px;min-width:150px}.stat .num{font-size:24px;font-weight:900;line-height:1}.stat .cap{font-size:12px;color:var(--muted);margin-top:4px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}.field-checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;max-height:220px;overflow:auto;padding:10px;border:1px solid var(--hair2);border-radius:14px;background:#fbfbfd}.field-checks label{display:flex;align-items:center;gap:8px;font-size:13px}.tablewrap{border:1px solid var(--hair2);border-radius:18px;overflow:auto;max-height:560px;background:#fff}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 12px;border-bottom:1px solid var(--hair2);white-space:nowrap;max-width:340px;overflow:hidden;text-overflow:ellipsis;text-align:left}th{position:sticky;top:0;background:#fbfbfd;color:var(--muted);font-weight:800;z-index:1}tr:hover td{background:#fafafa}.footer{padding:34px 24px 54px;text-align:center;color:var(--muted);font-size:12px}.hidden{display:none!important}.load-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-input{display:none}
+@media(max-width:860px){.source-grid,.two-col{grid-template-columns:1fr}.stage-grid{grid-template-columns:1fr 1fr}.topbar-inner{align-items:flex-start;flex-direction:column}.top-actions{justify-content:flex-start}.hero{padding-top:38px}.card{padding:22px}.filters{grid-template-columns:1fr}}
+@media(max-width:520px){.stage-grid{grid-template-columns:1fr}.hero h1{font-size:36px}.tagline{font-size:16px}.pill{width:100%;justify-content:center}.top-actions .btn{font-size:13px;padding:9px 12px}}
+</style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Nemotron-Personas USA 다단계 추출기</div>
+      <div class="top-actions">
+        <button id="saveProjectBtn" class="btn ghost small">프로젝트 저장 JSON</button>
+        <label class="btn ghost small" for="openProjectInput">프로젝트 열기 JSON</label>
+        <input id="openProjectInput" class="file-input" type="file" accept="application/json,.json" />
+        <a class="btn tinted small" href="https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA" target="_blank" rel="noopener">미국 데이터셋 ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">USA-only · 1차 5단계 누적 수집 · 2차 정밀 필터</div>
+    <h1>미국 전용 Nemotron-Personas 다단계 추출기</h1>
+    <p class="tagline">
+      NVIDIA <b>Nemotron-Personas-USA</b> 데이터셋에서 조건에 맞는 미국 합성 페르소나를 수집합니다.
+      1차는 성별·나이·지역·학력 같은 <b>정확 조건</b>으로 단계당 <b>5,000명</b>씩, 최대 <b>25,000명</b>까지 누적 수집하고,
+      2차는 프로그램 안에 보관된 전체 후보군을 키워드로 다시 정밀 필터링합니다.
+    </p>
+    <div class="pill-row">
+      <span class="pill"><b>1차</b> 동일 조건에서 1~5단계 누적 수집</span>
+      <span class="pill"><b>2차</b> 누적 후보 전체에서 키워드 정밀 필터</span>
+      <span class="pill"><b>저장</b> 엑셀 또는 프로젝트 JSON 저장</span>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <div id="banner" class="banner">미국 데이터 정보를 불러오는 중…</div>
+
+    <section class="card">
+      <div class="card-head">
+        <span class="step">0</span>
+        <div>
+          <h2>데이터 소스</h2>
+          <p class="lede">미국 데이터셋만 사용합니다. 국가 선택 기능은 제거했습니다.</p>
+        </div>
+      </div>
+      <div class="grid source-grid">
+        <div class="source-box"><div class="label">Dataset</div><div class="value mono">nvidia/Nemotron-Personas-USA</div></div>
+        <div class="source-box"><div class="label">Config / Split</div><div id="configSplit" class="value">확인 중…</div></div>
+        <div class="source-box"><div class="label">Source size</div><div id="sourceSize" class="value">확인 중…</div></div>
+      </div>
+      <p class="fine">화면 라벨은 한국어로 보이지만, 수집 조건은 미국 데이터의 원본 컬럼명과 영어 원문값을 사용합니다.</p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <span class="step">1</span>
+        <div>
+          <h2>1차 정확 조건</h2>
+          <p class="lede">성별, 나이, 주·도시·우편번호, 학력처럼 명확한 조건은 먼저 서버에서 줄입니다. 필요 없으면 <b>상관 없음</b>으로 두세요.</p>
+        </div>
+      </div>
+      <div id="filters" class="filters"></div>
+      <div class="button-row" style="margin-top:18px">
+        <button id="resetFiltersBtn" class="btn ghost">정확 조건 초기화</button>
+        <button id="resetAllBtn" class="btn danger">수집 데이터 전체 리셋</button>
+      </div>
+      <p id="filterSignatureNote" class="fine"></p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <span class="step">2</span>
+        <div>
+          <h2>1차 후보 수집: 1~5단계 누적</h2>
+          <p class="lede">선택한 동일 조건에서 단계별로 최대 5,000명씩 이어서 수집합니다. 5단계까지 최대 25,000명입니다.</p>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div id="candidateCount" class="num">0</div><div class="cap">누적 1차 후보</div></div>
+        <div class="stat"><div id="finalCount" class="num">0</div><div class="cap">2차 최종 결과</div></div>
+        <div class="stat"><div id="resumeOffset" class="num">0</div><div class="cap">다음 서버 Offset</div></div>
+        <div class="stat"><div id="fallbackState" class="num">OFF</div><div class="cap">안전 스캔 모드</div></div>
+      </div>
+      <div id="stageGrid" class="stage-grid"></div>
+      <div id="collectStatus" class="status-line">아직 수집을 시작하지 않았습니다.</div>
+      <div class="progress"><div id="collectProgressBar"></div></div>
+      <div class="button-row" style="margin-top:18px">
+        <button id="cancelBtn" class="btn danger" disabled>수집 취소</button>
+        <button id="downloadCandidatesBtn" class="btn tinted" disabled>1차 후보 엑셀 저장</button>
+      </div>
+      <p class="fine">HTTP 422 오류가 발생하면 자동으로 안전 스캔 모드로 전환해 <span class="mono">/rows</span>를 순차 읽고 브라우저에서 정확 조건을 다시 검증합니다.</p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <span class="step">3</span>
+        <div>
+          <h2>2차 정밀 필터</h2>
+          <p class="lede">누적된 전체 1차 후보군 안에서만 작동합니다. 서버에 다시 요청하지 않습니다.</p>
+        </div>
+      </div>
+      <div class="two-col">
+        <div>
+          <label class="field-title" for="includeKeywords">포함 키워드</label>
+          <textarea id="includeKeywords" placeholder="예: designer, product design, UX, research
+쉼표나 줄바꿈으로 구분"></textarea>
+          <p class="hint">입력한 키워드를 선택한 컬럼에서 찾습니다.</p>
+        </div>
+        <div>
+          <label class="field-title" for="excludeKeywords">제외 키워드</label>
+          <textarea id="excludeKeywords" placeholder="예: student, retired
+쉼표나 줄바꿈으로 구분"></textarea>
+          <p class="hint">이 키워드가 하나라도 있으면 제외합니다.</p>
+        </div>
+      </div>
+      <div class="two-col" style="margin-top:18px">
+        <div>
+          <label class="field-title" for="matchMode">포함 조건 방식</label>
+          <select id="matchMode">
+            <option value="any">하나라도 포함</option>
+            <option value="all">모두 포함</option>
+            <option value="min">최소 N개 이상 포함</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-title" for="minMatch">최소 포함 개수</label>
+          <input id="minMatch" type="number" min="1" max="99" value="2" />
+        </div>
+      </div>
+      <div style="margin-top:18px">
+        <div class="field-title">2차 검색 대상 컬럼</div>
+        <div id="secondaryFields" class="field-checks"></div>
+      </div>
+      <div class="button-row" style="margin-top:18px">
+        <button id="runSecondaryBtn" class="btn primary" disabled>2차 정밀 필터 실행</button>
+        <button id="downloadFinalBtn" class="btn green" disabled>최종 결과 엑셀 저장</button>
+      </div>
+      <div id="secondaryStatus" class="status-line"></div>
+    </section>
+
+    <section id="previewCard" class="card hidden">
+      <div class="card-head">
+        <span class="step">4</span>
+        <div>
+          <h2>미리보기</h2>
+          <p id="previewInfo" class="lede"></p>
+        </div>
+      </div>
+      <div class="tablewrap"><table id="previewTable"></table></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    데이터 출처: <a href="https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA" target="_blank" rel="noopener">NVIDIA Nemotron-Personas-USA</a> · 합성 데이터이며 실제 개인정보가 아닙니다.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
